@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Triangolo Rettangolo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --sfondo: #f6f1e8;
+      --pannello: #fffdf8;
+      --bordo: #d5c6aa;
+      --testo: #2c2418;
+      --accento: #b25c2f;
+      --accento-scuro: #7d3d1f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, #fff7e6, transparent 35%),
+        linear-gradient(180deg, #f4ecdf, var(--sfondo));
+      color: var(--testo);
+    }
+
+    main {
+      width: min(960px, calc(100% - 32px));
+      margin-top: 120px;
+      margin-bottom: 48px;
+      padding: 36px 24px 48px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--accento-scuro);
+    }
+
+    p {
+      line-height: 1.5;
+    }
+
+    .griglia {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      align-items: start;
+    }
+
+    .scheda {
+      background: var(--pannello);
+      border: 2px solid var(--bordo);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(89, 67, 28, 0.08);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--bordo);
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background: var(--accento);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--accento-scuro);
+    }
+
+    .risultato {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #fff4e7;
+      border: 1px solid #ebc9a8;
+      min-height: 60px;
+    }
+
+    .formula {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .etichetta {
+      font-size: 18px;
+      fill: var(--testo);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Calcolo dell'ipotenusa</h1>
+    <p>Inserisci i due cateti di un triangolo rettangolo. La pagina calcola l'ipotenusa con il teorema di Pitagora e disegna il triangolo.</p>
+
+    <div class="griglia">
+      <section class="scheda">
+        <label for="cateto1">Primo cateto</label>
+        <input id="cateto1" type="number" min="0" step="any" placeholder="Per esempio 3">
+
+        <label for="cateto2">Secondo cateto</label>
+        <input id="cateto2" type="number" min="0" step="any" placeholder="Per esempio 4">
+
+        <button id="calcola" type="button">Calcola</button>
+
+        <div class="risultato" id="risultato">
+          Scrivi i due cateti e premi "Calcola".
+        </div>
+      </section>
+
+      <section class="scheda">
+        <svg viewBox="0 0 420 320" aria-label="Disegno del triangolo rettangolo">
+          <rect x="0" y="0" width="420" height="320" rx="18" fill="#fffaf2"></rect>
+          <polygon id="triangolo" points="70,250 70,250 70,250" fill="#f0b37e" stroke="#7d3d1f" stroke-width="4"></polygon>
+          <path
+           id="angoloRetto"
+           d="M70 250 L100 250 L100 220 L70 220 Z"
+           fill="#8a4524"
+           stroke="#7d3d1f"
+           stroke-width="3"
+            style="display: none;"
+          ></path>
+          <text id="testoCateto1" class="etichetta" x="160" y="275"></text>
+          <text id="testoCateto2" class="etichetta" x="25" y="160"></text>
+          <text id="testoIpotenusa" class="etichetta" x="180" y="150"></text>
+        </svg>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const angoloRetto = document.getElementById("angoloRetto");
+    const inputCateto1 = document.getElementById("cateto1");
+    const inputCateto2 = document.getElementById("cateto2");
+    const risultato = document.getElementById("risultato");
+    const triangolo = document.getElementById("triangolo");
+    const testoCateto1 = document.getElementById("testoCateto1");
+    const testoCateto2 = document.getElementById("testoCateto2");
+    const testoIpotenusa = document.getElementById("testoIpotenusa");
+    const bottone = document.getElementById("calcola");
+    function calcolaTriangolo() {
+      const cateto1 = Number(inputCateto1.value);
+      const cateto2 = Number(inputCateto2.value);
+if (cateto1 <= 0 || cateto2 <= 0) {
+  risultato.textContent = "Inserisci due numeri maggiori di zero.";
+  angoloRetto.style.display = "none";
+  return;
+}
+
+angoloRetto.style.display = "block";
+      
+
+      const ipotenusa = Math.sqrt(cateto1 ** 2 + cateto2 ** 2);
+      const ipotenusaTesto = Number.isInteger(ipotenusa) ? ipotenusa : ipotenusa.toFixed(2);
+      const larghezzaSvg = 420;
+      const altezzaSvg = 320;
+      const margineOrizzontale = 110;
+      const margineVerticale = 70;
+      const scala = Math.min(
+        (larghezzaSvg - margineOrizzontale * 2) / cateto1,
+        (altezzaSvg - margineVerticale * 2) / cateto2
+      );
+      const base = cateto1 * scala;
+      const altezza = cateto2 * scala;
+
+      const x1 = (larghezzaSvg - base) / 2;
+      const y1 = (altezzaSvg + altezza) / 2;
+      const x2 = x1 + base;
+      const y2 = y1;
+      const x3 = x1;
+      const y3 = y1 - altezza;
+      const latoQuadrato = Math.min(base, altezza) * 0.25;
+      const xQuadrato2 = x1 + latoQuadrato;
+      const yQuadrato2 = y1 - latoQuadrato;
+
+angoloRetto.setAttribute(
+  "d",
+  `M${x1} ${y1} L${xQuadrato2} ${y1} L${xQuadrato2} ${yQuadrato2} L${x1} ${yQuadrato2} Z`
+); 
+      triangolo.setAttribute("points", `${x1},${y1} ${x2},${y2} ${x3},${y3}`);
+
+      const distanzaEtichetta = Math.max(30, latoQuadrato * 0.9);
+      const metaIpotenusaX = (x2 + x3) / 2;
+      const metaIpotenusaY = (y2 + y3) / 2;
+      const dxIpotenusa = x2 - x3;
+      const dyIpotenusa = y2 - y3;
+      const lunghezzaIpotenusa = Math.sqrt(dxIpotenusa ** 2 + dyIpotenusa ** 2);
+      const normale1X = -dyIpotenusa / lunghezzaIpotenusa;
+      const normale1Y = dxIpotenusa / lunghezzaIpotenusa;
+      const centroTriangoloX = (x1 + x2 + x3) / 3;
+      const centroTriangoloY = (y1 + y2 + y3) / 3;
+      const versoCentroX = centroTriangoloX - metaIpotenusaX;
+      const versoCentroY = centroTriangoloY - metaIpotenusaY;
+      const prodottoScalare = normale1X * versoCentroX + normale1Y * versoCentroY;
+      const normaleEsternaX = prodottoScalare < 0 ? normale1X : -normale1X;
+      const normaleEsternaY = prodottoScalare < 0 ? normale1Y : -normale1Y;
+      const spostamentoTestoX = normaleEsternaX >= 0 ? 10 : -10;
+      const etichettaIpotenusaX = metaIpotenusaX + normaleEsternaX * distanzaEtichetta + spostamentoTestoX;
+      const etichettaIpotenusaY = metaIpotenusaY + normaleEsternaY * distanzaEtichetta;
+
+      testoCateto1.setAttribute("x", String(x1 - distanzaEtichetta));
+      testoCateto1.setAttribute("y", String((y1 + y3) / 2));
+      testoCateto1.setAttribute("text-anchor", "end");
+      testoCateto1.removeAttribute("transform");
+      testoCateto1.textContent = `c1 = ${cateto1}`;
+
+      testoCateto2.setAttribute("x", String((x1 + x2) / 2));
+      testoCateto2.setAttribute("y", String(y1 + distanzaEtichetta));
+      testoCateto2.setAttribute("text-anchor", "middle");
+      testoCateto2.removeAttribute("transform");
+      testoCateto2.textContent = `c2 = ${cateto2}`;
+
+      testoIpotenusa.setAttribute("x", String(etichettaIpotenusaX));
+      testoIpotenusa.setAttribute("y", String(etichettaIpotenusaY));
+      testoIpotenusa.setAttribute("text-anchor", normaleEsternaX >= 0 ? "start" : "end");
+      testoIpotenusa.setAttribute("dominant-baseline", "middle");
+      testoIpotenusa.removeAttribute("transform");
+      testoIpotenusa.textContent = `i = ${ipotenusaTesto}`;
+
+      risultato.innerHTML = `
+        <div class="formula">Ipotenusa = √(${cateto1}² + ${cateto2}²) = ${ipotenusaTesto}</div>
+      `;
+    }
+
+    bottone.addEventListener("click", calcolaTriangolo);
+    inputCateto1.addEventListener("keydown", function (evento) {
+      if (evento.key === "Enter") calcolaTriangolo();
+    });
+    inputCateto2.addEventListener("keydown", function (evento) {
+      if (evento.key === "Enter") calcolaTriangolo();
+    });
+  </script>
+</body>
+</html>
