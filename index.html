@@ -191,11 +191,11 @@ angoloRetto.style.display = "block";
       const margineOrizzontale = 110;
       const margineVerticale = 70;
       const scala = Math.min(
-        (larghezzaSvg - margineOrizzontale * 2) / cateto1,
-        (altezzaSvg - margineVerticale * 2) / cateto2
+        (larghezzaSvg - margineOrizzontale * 2) / cateto2,
+        (altezzaSvg - margineVerticale * 2) / cateto1
       );
-      const base = cateto1 * scala;
-      const altezza = cateto2 * scala;
+      const base = cateto2 * scala;
+      const altezza = cateto1 * scala;
 
       const x1 = (larghezzaSvg - base) / 2;
       const y1 = (altezzaSvg + altezza) / 2;
